@@ -1,0 +1,26 @@
+export default async function ChannelLoading() {
+  return (
+    <div className="grid grid-cols-4 min-h-screen">
+      <div className="h-screen flex flex-col bg-gray-100">Loading...</div>
+      <div className="col-span-3">
+        <main className="">
+          <div className="h-screen flex flex-col">
+            <div className="sticky top-0 w-full p-8">
+              <p>Loading...</p>
+            </div>
+            <div className="overflow-y-auto flex-grow p-8">
+              {/* Main content goes here */}
+              <div>
+                <p>Loading...</p>
+              </div>
+            </div>
+            <div className="sticky bottom-0 w-full p-8 ">
+              {/* Fixed content at the bottom */}
+              <p>Loading...</p>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+  );
+}

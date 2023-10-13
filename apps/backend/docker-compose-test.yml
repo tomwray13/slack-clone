@@ -1,9 +1,11 @@
 version: '3.8'
 
+name: slack-clone-backend-test
+
 services:
-  test_nestjs_postgres:
+  slack_clone_test_postgres:
     image: postgres:alpine
-    container_name: test_nestjs_postgres
+    container_name: slack_clone_test_postgres
     restart: 'no'
     healthcheck:
       test: ['CMD-SHELL', 'pg_isready -U $POSTGRES_USER']
@@ -18,20 +20,20 @@ services:
     ports:
       - '5444:5432' # Different port to avoid conflict with the development environment
     volumes:
-      - test_nestjs_postgres:/var/lib/postgresql/data
+      - slack_clone_test_postgres:/var/lib/postgresql/data
 
-  test_nestjs_redis:
+  slack_clone_test_redis:
     image: redis:alpine
-    container_name: test_nestjs_redis
+    container_name: slack_clone_test_redis
     ports:
       - '6380:6379' # Different port to avoid conflict with the development environment
     volumes:
-      - test_nestjs_redis:/data
+      - slack_clone_test_redis:/data
 
 networks:
   default:
     name: nestjs_starter_test
 
 volumes:
-  test_nestjs_postgres: # Needs to be the same as the volume name in the postgres service
-  test_nestjs_redis: # Needs to be the same as the volume name in the redis service
+  slack_clone_test_postgres: # Needs to be the same as the volume name in the postgres service
+  slack_clone_test_redis: # Needs to be the same as the volume name in the redis service
