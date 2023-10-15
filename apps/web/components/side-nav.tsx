@@ -28,7 +28,7 @@ const SideNav = async ({ uid }: { uid: string }) => {
           ))}
         </div>
       </div>
-      <div className="sticky bottom-0 w-full p-8 border-t">
+      <div className="sticky bottom-0 w-full p-8">
         {/* Fixed content at the bottom */}
         <p className="opacity-40 hover:opacity-100 cursor-pointer">Logout</p>
       </div>
