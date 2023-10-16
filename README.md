@@ -1,4 +1,3 @@
-
 ## Setup
 
 Install dependencies:
@@ -7,18 +6,19 @@ Install dependencies:
 pnpm install
 ```
 
-Copy the env example file
+Copy the env example file for both projects
 
 ```
-cp .env.example .env
+cp apps/backend/.env.example apps/backend/.env
+cp apps/web/.env.example apps/web/.env.local
 ```
 
-In both Docker Compose files, update the name of the containers and networks to match the respective project.
+In the `backend` app in both Docker Compose files, update the name of the containers and networks to match the respective project.
 
 E.g. If my project is called "URL Shortener", I'd update the docker compose file to:
 
 ```yml
-version: '3.8'
+version: "3.8"
 
 services:
   url_shortener_postgres:
@@ -31,7 +31,7 @@ services:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     ports:
-      - '5432:5432'
+      - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
@@ -39,7 +39,7 @@ services:
     image: redis:alpine
     container_name: url_shortener_redis
     ports:
-      - '6379:6379'
+      - "6379:6379"
     volumes:
       - redis_data:/data
 
@@ -50,21 +50,20 @@ networks:
 volumes:
   postgres_data:
   redis_data:
-
 ```
 
 You should also update the docker compose test file:
 
 ```yml
-version: '3.8'
+version: "3.8"
 
 services:
   test_url_shortener_postgres:
     image: postgres:alpine
     container_name: test_url_shortener_postgres
-    restart: 'no'
+    restart: "no"
     healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -U $POSTGRES_USER']
+      test: ["CMD-SHELL", "pg_isready -U $POSTGRES_USER"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -74,7 +73,7 @@ services:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     ports:
-      - '5444:5432' # Different port to avoid conflict with the development environment
+      - "5444:5432" # Different port to avoid conflict with the development environment
     volumes:
       - test_url_shortener_postgres:/var/lib/postgresql/data
 
@@ -82,7 +81,7 @@ services:
     image: redis:alpine
     container_name: test_url_shortener_redis
     ports:
-      - '6380:6379' # Different port to avoid conflict with the development environment
+      - "6380:6379" # Different port to avoid conflict with the development environment
     volumes:
       - test_url_shortener_redis:/data
 
@@ -93,5 +92,4 @@ networks:
 volumes:
   test_url_shortener_postgres: # Needs to be the same as the volume name in the postgres service
   test_url_shortener_redis: # Needs to be the same as the volume name in the redis service
-
 ```
