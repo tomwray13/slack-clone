@@ -1,12 +1,5 @@
 import { create } from "zustand";
-
-interface Message {
-  id: string;
-  text: string;
-  createdAt: string;
-  updatedAt: string;
-  user: { id: string; firstName: string; lastName: string };
-}
+import { Message } from "../data";
 
 interface MessageStore {
   messages: Message[];

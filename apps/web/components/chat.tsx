@@ -1,62 +1,49 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { io, Socket } from "socket.io-client";
-import { Message } from "./message";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
+import { Form, FormControl, FormField, FormItem, FormMessage } from "./ui/form";
+import React, { useEffect } from "react";
 import { Button } from "../components/ui/button";
-import { Messages } from "./messages";
 import useMessageStore from "../store/messages.store";
 import { Input } from "./ui/input";
+import { ChannelWithMessages } from "../data";
+import { Messages } from "./messages";
 
-const SERVER_URL = "http://localhost:4000";
-
-interface Channel {
-  id: string;
-  name: string;
-  description: string;
-  messages: Message[];
-}
-
-const Chat = ({ channel }: { channel: Channel }) => {
+const Chat = ({ channel }: { channel: ChannelWithMessages }) => {
   // set messages state in the store
-  useMessageStore.setState({ messages: channel.messages });
+  useEffect(() => {
+    useMessageStore.setState({ messages: channel.messages });
+  }, [channel.messages]);
+  const messagesInState = useMessageStore((state) => state.messages);
   const addMessage = useMessageStore((state) => state.addMessage);
 
-  // initialize socket connection
-  const [socket, setSocket] = useState<Socket | null>(null);
-  useEffect(() => {
-    // Initialize socket connection when component mounts
-    const socketInstance = io(SERVER_URL);
+  const FormSchema = z.object({
+    message: z.string().optional(),
+  });
+  const form = useForm<z.infer<typeof FormSchema>>({
+    resolver: zodResolver(FormSchema),
+    defaultValues: {
+      message: ``,
+    },
+  });
 
-    socketInstance.on("connect", () => {
-      console.log("Connected to the server");
-
-      socketInstance.on("new_message", (message: Message) => {
-        addMessage(message);
-      });
+  function onSubmit(data: z.infer<typeof FormSchema>) {
+    if (!data.message) return;
+    addMessage({
+      id: messagesInState.length + 1,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      text: data.message,
+      user: {
+        id: 700,
+        firstName: `John`,
+        lastName: `Doe`,
+      },
     });
-
-    // Set socket state
-    setSocket(socketInstance);
-
-    // Clean up the socket connection when component unmounts
-    return () => {
-      socketInstance.disconnect();
-    };
-  }, [addMessage]);
-
-  const handleButtonClick = () => {
-    if (socket) {
-      socket.emit("send_message", {
-        text: "Hello from the React client!",
-        user: {
-          id: `700`,
-          firstName: `John`,
-          lastName: `Doe`,
-        },
-      });
-    }
-  };
+    form.reset();
+  }
 
   return (
     <>
@@ -65,12 +52,29 @@ const Chat = ({ channel }: { channel: Channel }) => {
       </div>
       <div className="sticky bottom-0 w-full p-8 border-t">
         {/* Fixed content at the bottom */}
-        <div className="flex w-full items-center space-x-2">
-          <Input type="email" placeholder="Email" />
-          <Button type="submit" onClick={handleButtonClick}>
-            Send
-          </Button>
-        </div>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="">
+            <div className="flex w-full items-center space-x-2">
+              <FormField
+                control={form.control}
+                name="message"
+                render={({ field }) => (
+                  <FormItem className="w-full">
+                    <FormControl>
+                      <Input
+                        placeholder="Start typing..."
+                        autoFocus
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Button type="submit">Send</Button>
+            </div>
+          </form>
+        </Form>
       </div>
     </>
   );

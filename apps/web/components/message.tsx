@@ -1,16 +1,10 @@
 "use client";
 
-export interface Message {
-  id: string;
-  text: string;
-  createdAt: string;
-  updatedAt: string;
-  user: { id: string; firstName: string; lastName: string };
-}
+import { Message } from "../data";
 
 const Message = ({ message }: { message: Message }) => {
   const loggedInUser = {
-    id: `700`,
+    id: 700,
   };
   const colors = [
     "bg-blue-50",
@@ -19,7 +13,7 @@ const Message = ({ message }: { message: Message }) => {
     "bg-purple-50",
     "bg-red-50",
   ];
-  const getColor = (userId: string) => colors[parseInt(userId) % colors.length];
+  const getColor = (userId: number) => colors[userId % colors.length];
   return (
     <div
       className={`w-4/5 ${
