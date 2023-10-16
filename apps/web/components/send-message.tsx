@@ -28,7 +28,7 @@ const SendMessage = () => {
       id: messagesInState.length + 1,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
-      text: data.message,
+      content: data.message,
       user: {
         id: 700,
         firstName: `John`,

@@ -29,7 +29,7 @@ const Message = ({ message }: { message: Message }) => {
             {message.user.firstName} {message.user.lastName}
           </span>
         </div>
-        <p>{message.text}</p>
+        <p>{message.content}</p>
         <p className="text-xs mt-2 text-gray-600">
           {new Intl.DateTimeFormat("en-US", {
             hour: "2-digit",

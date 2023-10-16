@@ -32,7 +32,7 @@ export const channels = [
 export const messages = [
   {
     id: 130,
-    text: `No problem! See you at the meeting.`,
+    content: `No problem! See you at the meeting.`,
     createdAt: `2023-11-01T02:30:00.000Z`,
     updatedAt: `2023-11-01T02:30:00.000Z`,
     user: {
@@ -43,7 +43,7 @@ export const messages = [
   },
   {
     id: 129,
-    text: `Awesome, Fred. Thanks for doing that!`,
+    content: `Awesome, Fred. Thanks for doing that!`,
     createdAt: `2023-11-01T02:15:00.000Z`,
     updatedAt: `2023-11-01T02:15:00.000Z`,
     user: {
@@ -54,7 +54,7 @@ export const messages = [
   },
   {
     id: 128,
-    text: `Great! I've prepared the presentation. Will share the link.`,
+    content: `Great! I've prepared the presentation. Will share the link.`,
     createdAt: `2023-11-01T02:00:00.000Z`,
     updatedAt: `2023-11-01T02:00:00.000Z`,
     user: {
@@ -65,7 +65,7 @@ export const messages = [
   },
   {
     id: 127,
-    text: `I'm in too. Just got a reminder. See you both soon!`,
+    content: `I'm in too. Just got a reminder. See you both soon!`,
     createdAt: `2023-11-01T01:45:00.000Z`,
     updatedAt: `2023-11-01T01:45:00.000Z`,
     user: {
@@ -76,7 +76,7 @@ export const messages = [
   },
   {
     id: 126,
-    text: `Thanks for confirming, Fred. I'll be joining from home.`,
+    content: `Thanks for confirming, Fred. I'll be joining from home.`,
     createdAt: `2023-11-01T01:30:00.000Z`,
     updatedAt: `2023-11-01T01:30:00.000Z`,
     user: {
@@ -87,7 +87,7 @@ export const messages = [
   },
   {
     id: 125,
-    text: `Yes, John. I'll be there. Just finishing up some work.`,
+    content: `Yes, John. I'll be there. Just finishing up some work.`,
     createdAt: `2023-11-01T01:15:00.000Z`,
     updatedAt: `2023-11-01T01:15:00.000Z`,
     user: {
@@ -98,7 +98,7 @@ export const messages = [
   },
   {
     id: 124,
-    text: `Hey everyone! Are we still on for the meeting at 3pm?`,
+    content: `Hey everyone! Are we still on for the meeting at 3pm?`,
     createdAt: `2023-11-01T01:00:00.000Z`,
     updatedAt: `2023-11-01T01:00:00.000Z`,
     user: {

@@ -8,7 +8,7 @@ export interface Channel {
 
 export interface Message {
   id: number;
-  text: string;
+  content: string;
   createdAt: string;
   updatedAt: string;
   user: {
