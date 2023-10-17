@@ -1,35 +1,31 @@
 import { Injectable } from '@nestjs/common';
-// import { CreateChannelDto } from './dto/create-channel.dto';
-// import { UpdateChannelDto } from './dto/update-channel.dto';
-import { channels, messages } from './data';
+import { CreateChannelDto } from './dto/create-channel.dto';
+import { DatabaseService } from '../../database/database.service';
 
 @Injectable()
 export class ChannelService {
-  // create(createChannelDto: CreateChannelDto) {
-  //   console.log(`createChannelDto`, createChannelDto);
-  //   return 'This action adds a new channel';
-  // }
+  constructor(private readonly databaseService: DatabaseService) {}
 
-  findAll() {
-    return channels;
+  async create(createChannelDto: CreateChannelDto) {
+    return await this.databaseService.channel.create({
+      data: createChannelDto,
+    });
   }
 
-  findOne(id: number) {
-    const channel = channels.find((channel) => channel.id === id);
-    if (!channel) {
-      throw new Error('Channel not found');
-    }
-    return {
-      ...channel,
-      messages,
-    };
+  async findAll() {
+    return await this.databaseService.channel.findMany();
   }
 
-  // update(id: number, updateChannelDto: UpdateChannelDto) {
-  //   return `This action updates a #${id} channel`;
-  // }
-
-  // remove(id: number) {
-  //   return `This action removes a #${id} channel`;
-  // }
+  async findOne(id: number) {
+    return await this.databaseService.channel.findUnique({
+      where: { id },
+      include: {
+        messages: {
+          include: {
+            user: true,
+          },
+        },
+      },
+    });
+  }
 }
