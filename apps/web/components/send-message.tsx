@@ -6,12 +6,9 @@ import * as z from "zod";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "./ui/form";
 import { Button } from "../components/ui/button";
 import { Input } from "./ui/input";
-import useMessageStore from "../store/messages.store";
+import useSocketStore from "../store/socket.store";
 
-const SendMessage = () => {
-  const messagesInState = useMessageStore((state) => state.messages);
-  const addMessage = useMessageStore((state) => state.addMessage);
-
+const SendMessage = ({ channelId }: { channelId: number }) => {
   const FormSchema = z.object({
     message: z.string().optional(),
   });
@@ -22,18 +19,13 @@ const SendMessage = () => {
     },
   });
 
+  const sendMessage = useSocketStore((state) => state.sendMessage);
   function onSubmit(data: z.infer<typeof FormSchema>) {
     if (!data.message) return;
-    addMessage({
-      id: messagesInState.length + 1,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+    sendMessage({
       content: data.message,
-      user: {
-        id: 700,
-        firstName: `John`,
-        lastName: `Doe`,
-      },
+      channelId,
+      userId: 1,
     });
     form.reset();
   }

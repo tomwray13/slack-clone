@@ -5,12 +5,24 @@ import useMessageStore from "../store/messages.store";
 import { ChannelWithMessages } from "../data";
 import { Messages } from "./messages";
 import { SendMessage } from "./send-message";
+import useSocketStore from "../store/socket.store";
 
 const Chat = ({ channel }: { channel: ChannelWithMessages }) => {
-  // set messages state in the store
   useEffect(() => {
     useMessageStore.setState({ messages: channel.messages });
   }, [channel.messages]);
+
+  const initializeSocket = useSocketStore((state) => state.initializeSocket);
+  const socket = useSocketStore((state) => state.socket);
+  const webSocketServer = process.env.NEXT_PUBLIC_BACKEND_URL as string;
+  useEffect(() => {
+    initializeSocket(webSocketServer);
+    return () => {
+      if (socket) {
+        socket.disconnect();
+      }
+    };
+  });
 
   return (
     <>
@@ -18,7 +30,7 @@ const Chat = ({ channel }: { channel: ChannelWithMessages }) => {
         <Messages />
       </div>
       <div className="sticky bottom-0 w-full p-8 border-t">
-        <SendMessage />
+        <SendMessage channelId={channel.id} />
       </div>
     </>
   );
