@@ -21,6 +21,9 @@ export class ChannelService {
       where: { id },
       include: {
         messages: {
+          orderBy: {
+            createdAt: 'asc',
+          },
           include: {
             user: true,
           },

@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { CoreModule } from './core/core.module';
-import { DatabaseModule } from './database/database.module';
 import { ChannelModule } from './modules/channel/channel.module';
+import { MessageModule } from './modules/message/message.module';
 
 @Module({
-  imports: [CoreModule, DatabaseModule, ChannelModule],
+  imports: [CoreModule, ChannelModule, MessageModule],
   controllers: [],
   providers: [],
 })
