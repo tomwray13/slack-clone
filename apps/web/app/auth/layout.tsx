@@ -1,5 +1,4 @@
 import { Metadata } from "next";
-import { headers } from "next/headers";
 
 export const metadata: Metadata = {
   title: "Authentication",
@@ -11,8 +10,6 @@ export default function AuthLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const headersList = headers().get("x-pathname");
-  console.log(headersList);
   return (
     <>
       <div className="container relative h-screen flex-col items-center justify-center grid max-w-none grid-cols-1 lg:grid-cols-2 px-0">
