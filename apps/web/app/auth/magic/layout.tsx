@@ -8,7 +8,7 @@ function waitForTwoSeconds(): Promise<void> {
   });
 }
 
-export default async function Magic() {
+export default async function MagicLayout() {
   await waitForTwoSeconds();
   return (
     <div className="flex flex-col items-center justify-center">

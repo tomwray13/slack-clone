@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { buttonVariants } from "../../../components/ui/button";
 import { cn } from "../../../lib/utils";
-import { AuthForm } from "../../../components/auth-form";
+import { AuthFormSignUp } from "../../../components/auth-form-signup";
 
 export default function SignUp() {
   return (
@@ -14,7 +14,7 @@ export default function SignUp() {
           Enter your email below to create your account
         </p>
       </div>
-      <AuthForm />
+      <AuthFormSignUp />
       <p className="px-8 text-center text-sm text-muted-foreground">
         <Link
           href="/auth/signin"

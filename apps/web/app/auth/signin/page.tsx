@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { buttonVariants } from "../../../components/ui/button";
 import { cn } from "../../../lib/utils";
-import { AuthForm } from "../../../components/auth-form";
+import { AuthFormSignIn } from "../../../components/auth-form-signin";
 
 export default function SignIn() {
   return (
@@ -12,7 +12,7 @@ export default function SignIn() {
           Enter your email below to login
         </p>
       </div>
-      <AuthForm />
+      <AuthFormSignIn />
       <p className="px-8 text-center text-sm text-muted-foreground">
         <Link
           href="/auth/signup"

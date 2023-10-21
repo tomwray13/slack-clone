@@ -14,25 +14,38 @@ import { Form, FormControl, FormField, FormItem, FormMessage } from "./ui/form";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
-export function AuthForm({ className, ...props }: UserAuthFormProps) {
+export function AuthFormSignUp({ className, ...props }: UserAuthFormProps) {
   const FormSchema = z.object({
     email: z.string().email({
       message: "Please enter a valid email address.",
+    }),
+    firstName: z.string().min(2, {
+      message: "First name must be at least 2 characters.",
+    }),
+    lastName: z.string().min(2, {
+      message: "Last name must be at least 2 characters.",
     }),
   });
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
       email: ``,
+      firstName: ``,
+      lastName: ``,
     },
   });
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const router = useRouter();
 
   function magicSubmit(data: z.infer<typeof FormSchema>) {
-    if (!data.email) return;
     setIsLoading(true);
-    router.push(`/auth/magic?email=${encodeURIComponent(data.email)}`);
+    router.push(
+      `/auth/magic/signup?email=${encodeURIComponent(
+        data.email
+      )}&firstName=${encodeURIComponent(
+        data.firstName
+      )}&lastName=${encodeURIComponent(data.lastName)}`
+    );
   }
 
   return (
@@ -40,6 +53,36 @@ export function AuthForm({ className, ...props }: UserAuthFormProps) {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(magicSubmit)} className="">
           <div className="space-y-2">
+            <div className="grid grid-cols-2 gap-2">
+              <FormField
+                control={form.control}
+                name="firstName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input
+                        id="firstName"
+                        placeholder="First name"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="lastName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input id="lastName" placeholder="Last name" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
             <FormField
               control={form.control}
               name="email"
