@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { DatabaseService } from '../../database/database.service';
 import { CreateUserDto } from './dto/create-user.dto';
+import { FindUserDto } from './dto/find-user.dto';
 
 @Injectable()
 export class UserService {
@@ -12,7 +13,7 @@ export class UserService {
     });
   }
 
-  async findOne(email: string) {
+  async findOne({ email }: FindUserDto) {
     return await this.databaseService.user.findUnique({
       where: {
         email,
