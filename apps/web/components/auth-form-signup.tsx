@@ -34,11 +34,10 @@ export function AuthFormSignUp({ className, ...props }: UserAuthFormProps) {
       lastName: ``,
     },
   });
-  const [isLoading, setIsLoading] = React.useState<boolean>(false);
+
   const router = useRouter();
 
   function magicSubmit(data: z.infer<typeof FormSchema>) {
-    setIsLoading(true);
     router.push(
       `/auth/magic/signup?email=${encodeURIComponent(
         data.email
@@ -99,7 +98,6 @@ export function AuthFormSignUp({ className, ...props }: UserAuthFormProps) {
                       autoCapitalize="none"
                       autoComplete="email"
                       autoCorrect="off"
-                      disabled={isLoading}
                       {...field}
                     />
                   </FormControl>
@@ -107,12 +105,7 @@ export function AuthFormSignUp({ className, ...props }: UserAuthFormProps) {
                 </FormItem>
               )}
             />
-            <Button disabled={isLoading} className="w-full">
-              {isLoading && (
-                <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-              )}
-              Continue with Email
-            </Button>
+            <Button className="w-full">Continue with Email</Button>
           </div>
         </form>
       </Form>
@@ -126,12 +119,8 @@ export function AuthFormSignUp({ className, ...props }: UserAuthFormProps) {
           </span>
         </div>
       </div>
-      <Button variant="outline" type="button" disabled={isLoading}>
-        {isLoading ? (
-          <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-        ) : (
-          <Icons.google className="mr-2 h-4 w-4" />
-        )}{" "}
+      <Button variant="outline" type="button">
+        <Icons.google className="mr-2 h-4 w-4" />
         Google
       </Button>
     </div>
