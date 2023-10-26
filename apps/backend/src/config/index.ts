@@ -6,4 +6,7 @@ export default () => ({
     username: process.env.REDIS_USERNAME,
     password: process.env.REDIS_PASSWORD,
   },
+  apps: {
+    web: process.env.WEB_CLIENT_URL,
+  },
 });
