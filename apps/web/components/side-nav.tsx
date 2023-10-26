@@ -50,9 +50,11 @@ const SideNav = ({
       </div>
       <div className="sticky bottom-0 w-full p-8">
         {/* Fixed content at the bottom */}
-        <p className="opacity-40 hover:opacity-100 cursor-pointer text-sm">
-          Logout
-        </p>
+        <Link href={`/auth/signin`}>
+          <p className="opacity-40 hover:opacity-100 cursor-pointer text-sm">
+            Logout
+          </p>
+        </Link>
       </div>
     </>
   );

@@ -11,10 +11,14 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "./ui/form";
+import { magicSignIn } from "../data";
+import { useToast } from "./ui/use-toast";
+import { Toaster } from "./ui/toaster";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export function AuthFormSignIn({ className, ...props }: UserAuthFormProps) {
+  const { toast } = useToast();
   const FormSchema = z.object({
     email: z.string().email({
       message: "Please enter a valid email address.",
@@ -29,16 +33,27 @@ export function AuthFormSignIn({ className, ...props }: UserAuthFormProps) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const router = useRouter();
 
-  function magicSubmit(data: z.infer<typeof FormSchema>) {
+  async function handleLogin(data: z.infer<typeof FormSchema>) {
     if (!data.email) return;
     setIsLoading(true);
-    router.push(`/auth/magic/signin?email=${encodeURIComponent(data.email)}`);
+    try {
+      await magicSignIn(data.email);
+      router.push(`/auth/magic`);
+    } catch (error: any) {
+      toast({
+        title: "Unable to login",
+        description: error,
+        variant: `destructive`,
+      });
+      setIsLoading(false);
+    }
   }
 
   return (
     <div className={cn("grid gap-6 p-4", className)} {...props}>
+      <Toaster />
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(magicSubmit)} className="">
+        <form onSubmit={form.handleSubmit(handleLogin)} className="">
           <div className="space-y-2">
             <FormField
               control={form.control}

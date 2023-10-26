@@ -11,6 +11,9 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "./ui/form";
+import { magicSignUp } from "../data";
+import { toast } from "./ui/use-toast";
+import { Toaster } from "./ui/toaster";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -35,22 +38,34 @@ export function AuthFormSignUp({ className, ...props }: UserAuthFormProps) {
     },
   });
 
+  const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const router = useRouter();
 
-  function magicSubmit(data: z.infer<typeof FormSchema>) {
-    router.push(
-      `/auth/magic/signup?email=${encodeURIComponent(
-        data.email
-      )}&firstName=${encodeURIComponent(
-        data.firstName
-      )}&lastName=${encodeURIComponent(data.lastName)}`
-    );
+  async function handleSignup({
+    email,
+    firstName,
+    lastName,
+  }: z.infer<typeof FormSchema>) {
+    if (!email || !firstName || !lastName) return;
+    setIsLoading(true);
+    try {
+      await magicSignUp({ email, firstName, lastName });
+      router.push(`/auth/magic`);
+    } catch (error: any) {
+      toast({
+        title: "Unable to sign up",
+        description: error,
+        variant: `destructive`,
+      });
+      setIsLoading(false);
+    }
   }
 
   return (
     <div className={cn("grid gap-6 p-4", className)} {...props}>
+      <Toaster />
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(magicSubmit)} className="">
+        <form onSubmit={form.handleSubmit(handleSignup)} className="">
           <div className="space-y-2">
             <div className="grid grid-cols-2 gap-2">
               <FormField
@@ -105,7 +120,12 @@ export function AuthFormSignUp({ className, ...props }: UserAuthFormProps) {
                 </FormItem>
               )}
             />
-            <Button className="w-full">Continue with Email</Button>
+            <Button disabled={isLoading} className="w-full">
+              {isLoading && (
+                <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+              )}
+              Continue with Email
+            </Button>
           </div>
         </form>
       </Form>

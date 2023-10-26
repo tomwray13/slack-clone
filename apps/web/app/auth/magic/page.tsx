@@ -1,15 +1,6 @@
 import { Icons } from "../../../components/ui/icons";
 
-function waitForTwoSeconds(): Promise<void> {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve();
-    }, 2000);
-  });
-}
-
-export default async function MagicLayout() {
-  await waitForTwoSeconds();
+export default async function MagicPage() {
   return (
     <div className="flex flex-col items-center justify-center">
       <Icons.email className="h-16 w-16 mb-4" />
