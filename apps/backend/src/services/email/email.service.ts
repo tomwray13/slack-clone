@@ -19,11 +19,12 @@ export class EmailService {
     subject: string;
     html: string;
   }) {
-    await this.resend.emails.send({
-      from: 'Tom <contact@tomray.dev>',
-      to: email,
-      subject: subject,
-      html: html,
-    });
+    console.log(`EmailService.send`, email, subject, html);
+    // await this.resend.emails.send({
+    //   from: 'Tom <contact@tomray.dev>',
+    //   to: email,
+    //   subject: subject,
+    //   html: html,
+    // });
   }
 }

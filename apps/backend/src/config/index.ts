@@ -12,4 +12,8 @@ export default () => ({
   apps: {
     web: process.env.WEB_CLIENT_URL,
   },
+  google: {
+    clientId: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+  },
 });
