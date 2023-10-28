@@ -41,7 +41,7 @@ export class AuthService {
 
   private async createMagicLink(email: string) {
     const uuid = this.uuidService.generate();
-    await this.cacheService.set(`magic:${uuid}`, email, 60 * 15 * 1000);
+    await this.cacheService.set(`magic:${uuid}`, email, 60 * 15);
     return `${this.webClient}/auth/magic/${uuid}`;
   }
 }
