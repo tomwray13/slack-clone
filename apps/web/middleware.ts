@@ -8,13 +8,17 @@ export async function middleware(request: NextRequest) {
     const { id } = await getMainChannel();
     return NextResponse.redirect(new URL(`/channel/${id}`, request.url));
   }
-  if (request.nextUrl.pathname.startsWith(`/auth/magic/`)) {
-    const { pathname } = request.nextUrl;
-    const splitUrl = pathname.split(`/auth/magic/`);
-    const uuid = splitUrl[1];
-    try {
-      await magicVerify({ uuid });
-      return NextResponse.redirect(new URL(`/`, request.url));
-    } catch (error) {}
-  }
 }
+
+export const config = {
+  matcher: [
+    /*
+     * Match all request paths except for the ones starting with:
+     * - api (API routes)
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     */
+    "/((?!api|_next/static|_next/image|favicon.ico).*)",
+  ],
+};
