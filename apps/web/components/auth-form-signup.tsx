@@ -14,6 +14,7 @@ import { Form, FormControl, FormField, FormItem, FormMessage } from "./ui/form";
 import { magicSignUp } from "../data";
 import { toast } from "./ui/use-toast";
 import { Toaster } from "./ui/toaster";
+import { GoogleAuth } from "./auth-google";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -139,10 +140,7 @@ export function AuthFormSignUp({ className, ...props }: UserAuthFormProps) {
           </span>
         </div>
       </div>
-      <Button variant="outline" type="button">
-        <Icons.google className="mr-2 h-4 w-4" />
-        Google
-      </Button>
+      <GoogleAuth />
     </div>
   );
 }

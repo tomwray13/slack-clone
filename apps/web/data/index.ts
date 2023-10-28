@@ -117,3 +117,27 @@ export async function magicVerify({ uuid }: { uuid: string }) {
     throw data.message;
   }
 }
+
+export async function handleGoogleAuth({ token }: { token: string }) {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/google`,
+    {
+      next: { revalidate: 1 },
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        token,
+      }),
+    }
+  );
+  const data = await res.json();
+  if (!res.ok) {
+    if (Array.isArray(data.message)) {
+      throw data.message[0]; // Assuming message is always an array
+    }
+    throw data.message;
+  }
+  return data;
+}
