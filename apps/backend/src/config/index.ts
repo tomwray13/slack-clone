@@ -16,4 +16,10 @@ export default () => ({
     clientId: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
   },
+  jwt: {
+    secret: process.env.JWT_SECRET,
+    tokenAudience: process.env.JWT_TOKEN_AUDIENCE,
+    tokenIssuer: process.env.JWT_TOKEN_ISSUER,
+    accessTokenTtl: process.env.JWT_ACCESS_TOKEN_TTL,
+  },
 });

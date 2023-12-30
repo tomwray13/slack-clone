@@ -6,6 +6,8 @@ import { ConfigService } from '@nestjs/config';
 import { CacheService } from '../../core/cache/cache.service';
 import { CreateUserDto } from '../user/dto/create-user.dto';
 import { UserService } from '../user/user.service';
+import { JwtService } from '@nestjs/jwt';
+import { User } from '@prisma/client';
 
 @Injectable()
 export class AuthService {
@@ -16,6 +18,7 @@ export class AuthService {
     private readonly configService: ConfigService,
     private readonly cacheService: CacheService,
     private readonly userService: UserService,
+    private readonly jwtService: JwtService,
   ) {
     this.webClient = this.configService.getOrThrow(`apps.web`);
   }
@@ -36,6 +39,19 @@ export class AuthService {
       email: [data.email],
       subject: `Magic Sign Up - Slack Clone`,
       html: `<a href="${magicLink}">Sign in to Slack Clone</a>`,
+    });
+  }
+
+  async magicVerify(user: User) {
+    return await this.generateAccessToken(user);
+  }
+
+  async generateAccessToken(user: User) {
+    return await this.jwtService.signAsync({
+      sub: user.id,
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
     });
   }
 

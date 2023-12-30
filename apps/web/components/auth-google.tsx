@@ -11,7 +11,6 @@ import { handleGoogleAuth } from "../data";
 const GoogleAuth = () => {
   const router = useRouter();
   const googleClientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
-  console.log(`googleClientId`, googleClientId);
   const continueWithGoogle = async (response: CredentialResponse) => {
     try {
       if (!response.credential) return;

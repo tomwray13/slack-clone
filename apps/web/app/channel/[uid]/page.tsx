@@ -1,7 +1,11 @@
 import { Chat } from "../../../components/chat";
 import { getChannel } from "../../../data";
+import { cookies } from "next/headers";
 
 export default async function Channel({ params }: { params: { uid: string } }) {
+  const cookieStore = cookies();
+  const theme = cookieStore.get("accessToken");
+  console.log(`accessToken in cookie from page`, theme);
   const channel = await getChannel(params.uid);
   return (
     <main className="">

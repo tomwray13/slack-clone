@@ -34,12 +34,13 @@ export class AuthController {
     @Res({ passthrough: true }) response: Response,
     @Param('uuid', VerifyMagicPipe) user: User,
   ) {
-    response.cookie(`token`, `myspecicialtoken`, {
-      secure: false,
-      httpOnly: false,
-      sameSite: false,
+    const accessToken = this.authService.magicVerify(user);
+    response.cookie(`accessToken`, accessToken, {
+      secure: process.env.NODE_ENV !== `development`,
+      httpOnly: true,
+      sameSite: process.env.NODE_ENV !== `development` ? `none` : `lax`,
+      maxAge: 3600 * 24,
     });
-    return user;
   }
 
   @Post('google')
@@ -47,6 +48,13 @@ export class AuthController {
     @Res({ passthrough: true }) response: Response,
     @Body() { token }: GoogleTokenDto,
   ) {
-    return await this.googleAuthService.authenticate(token);
+    const accessToken = await this.googleAuthService.authenticate(token);
+    response.cookie(`accessToken`, accessToken, {
+      secure: false,
+      httpOnly: true,
+      maxAge: 3600 * 24 * 60,
+      sameSite: `lax`,
+      domain: `localhost`,
+    });
   }
 }

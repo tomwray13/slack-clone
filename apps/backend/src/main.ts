@@ -9,6 +9,7 @@ async function bootstrap() {
     logger: new Logger(),
     cors: {
       origin: process.env.WEB_CLIENT_URL,
+      credentials: true,
     },
   });
   app.use(helmet());

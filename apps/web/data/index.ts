@@ -127,6 +127,7 @@ export async function handleGoogleAuth({ token }: { token: string }) {
       headers: {
         "Content-Type": "application/json",
       },
+      credentials: `include`,
       body: JSON.stringify({
         token,
       }),
