@@ -11,6 +11,7 @@ import { DatabaseModule } from '../database/database.module';
 import { CacheModule } from '@nestjs/cache-manager';
 import * as redisStore from 'cache-manager-redis-store';
 import { CacheService } from './cache/cache.service';
+import { JwtModule } from '@nestjs/jwt';
 
 @Global()
 @Module({
@@ -38,6 +39,16 @@ import { CacheService } from './cache/cache.service';
       },
       inject: [ConfigService],
     }),
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => {
+        const secret = configService.getOrThrow(`jwt.secret`);
+        return {
+          secret,
+        };
+      },
+      inject: [ConfigService],
+    }),
   ],
   providers: [
     {
@@ -47,7 +58,7 @@ import { CacheService } from './cache/cache.service';
     LoggerService,
     CacheService,
   ],
-  exports: [LoggerService, CacheService],
+  exports: [LoggerService, CacheService, JwtModule],
 })
 export class CoreModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
