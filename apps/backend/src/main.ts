@@ -7,6 +7,9 @@ import { LoggerService } from './core/logger/logger.service';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     bufferLogs: true,
+    cors: {
+      origin: process.env.WEB_URL,
+    },
   });
   app.useLogger(app.get(LoggerService));
   app.use(helmet());
