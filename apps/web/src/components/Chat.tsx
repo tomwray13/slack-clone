@@ -1,22 +1,25 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store";
-import { addMessage } from "../store/messages";
+import { addMessage, addMessages } from "../store/messages";
+import { useGetChannelQuery } from "../store/api";
 
-export const Chat = () => {
+export const Chat = ({ channelId }: { channelId: number }) => {
   const dispatch = useDispatch();
 
-  const { data: channels, activeChannelId } = useSelector(
-    (state: RootState) => state.channels
-  );
-  const { data } = useSelector((state: RootState) => state.messages);
   const { user } = useSelector((state: RootState) => state.auth);
+  const { data: messages } = useSelector((state: RootState) => state.messages);
+  const {
+    data: channel,
+    isFetching,
+    isError,
+  } = useGetChannelQuery(channelId, { skip: !channelId });
 
-  const channel = channels.find((channel) => channel.id === activeChannelId);
-  const messages = data.filter(
-    (message) => message.channelId === activeChannelId
-  );
-  const [newMessage, setNewMessage] = useState<string>(``);
+  useEffect(() => {
+    if (channel) {
+      dispatch(addMessages(channel.data.messages));
+    }
+  }, [channelId, channel, dispatch]);
 
   const colors = [
     "bg-blue-50",
@@ -27,22 +30,30 @@ export const Chat = () => {
   ];
   const getColor = (userId: number) => colors[userId % colors.length];
 
+  const [newMessage, setNewMessage] = useState<string>(``);
   const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!newMessage || !activeChannelId || !user) {
+    if (!newMessage || !user) {
       throw new Error(`Unable to send message`);
     }
+    console.log(`USER`, user);
     dispatch(
-      addMessage({ content: newMessage, channelId: activeChannelId, user })
+      addMessage({ content: newMessage, channelId: channelId, user: user })
     );
     setNewMessage(``);
   };
+  if (isFetching) {
+    return <div>Loading...</div>;
+  }
+  if (isError) {
+    return <div>Error fetching channel</div>;
+  }
   return (
     <main className="col-span-3 bg-white">
       {channel && (
         <div className="h-screen flex flex-col">
           <div className="sticky top-0 w-full p-8 border-b">
-            <h1 className="font-bold text-xl mb-2">#{channel.name}</h1>
+            <h1 className="font-bold text-xl mb-2">#{channel.data.name}</h1>
           </div>
           <div className="overflow-y-auto flex-grow p-8 flex flex-col-reverse space-y-reverse space-y-6">
             {messages.map((message) => (

@@ -5,8 +5,8 @@ import {
   createApi,
   fetchBaseQuery,
 } from "@reduxjs/toolkit/query/react";
-import { User } from "../auth";
 import { store } from "..";
+import { Channel, User, Message } from "@backend/types";
 
 const baseQuery = fetchBaseQuery({
   baseUrl: process.env.NEXT_PUBLIC_BACKEND_API,
@@ -56,7 +56,7 @@ export const backendAuthApi = createApi({
   reducerPath: `backendAuthApi`,
   baseQuery,
   endpoints: (builder) => ({
-    googleAuth: builder.mutation<User, string>({
+    googleAuth: builder.mutation<{ data: User }, string>({
       query: (credentials: string) => ({
         url: `/auth/google`,
         method: `POST`,
@@ -78,9 +78,24 @@ export const backendApi = createApi({
   reducerPath: `backendApi`,
   baseQuery: baseQueryWithReauth,
   endpoints: (builder) => ({
-    getCurrentUser: builder.query<User, undefined>({
+    getCurrentUser: builder.query<{ data: User }, undefined>({
       query: () => ({
         url: `/user`,
+        method: `GET`,
+      }),
+    }),
+    getChannel: builder.query<
+      { data: { id: number; name: string; messages: Message[] } },
+      number
+    >({
+      query: (channelId: number) => ({
+        url: `/channel/${channelId}`,
+        method: `GET`,
+      }),
+    }),
+    getChannels: builder.query<{ data: Channel[] }, undefined>({
+      query: () => ({
+        url: `/channel`,
         method: `GET`,
       }),
     }),
@@ -88,4 +103,8 @@ export const backendApi = createApi({
 });
 
 export const { useGoogleAuthMutation, useLogoutMutation } = backendAuthApi;
-export const { useGetCurrentUserQuery } = backendApi;
+export const {
+  useGetCurrentUserQuery,
+  useGetChannelsQuery,
+  useGetChannelQuery,
+} = backendApi;

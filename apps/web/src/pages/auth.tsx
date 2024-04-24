@@ -9,7 +9,7 @@ export default function Auth() {
   const handleLogin = async (credentialResponse: CredentialResponse) => {
     if (!credentialResponse.credential) return;
     const user = await googleAuth(credentialResponse.credential).unwrap();
-    dispatch(login({ user }));
+    dispatch(login({ user: user.data }));
   };
 
   return (
