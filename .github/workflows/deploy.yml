@@ -2,7 +2,7 @@ name: Deploy
 
 on:
   workflow_run:
-    workflows: ['Tests']
+    workflows: ["Tests"]
     types:
       - completed
 
@@ -20,6 +20,6 @@ jobs:
       - name: Install Railway CLI
         run: pnpm add --global @railway/cli
       - name: Deploy to Railway
-        run: railway up --service="nestjs-starter"
+        run: railway up --service="nestjs-backend"
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
