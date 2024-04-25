@@ -21,7 +21,7 @@ export class AuthGuard implements CanActivate {
     const accessToken = parsedCookies['accessToken'];
 
     if (!accessToken) {
-      console.log(`event failed auth: no access token`);
+      console.log(`event failed auth: no access token!`);
       client.emit('auth_error', 'No access token provided');
       client.disconnect();
       return false;

@@ -38,7 +38,7 @@ export default function Auth() {
             <GoogleLogin
               onSuccess={handleLogin}
               onError={() => {
-                console.log("Login Failed");
+                console.log("Login Failed!");
               }}
             />
           </div>
