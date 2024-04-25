@@ -19,7 +19,6 @@ export const SideNav = () => {
     if (!newChannel) {
       return;
     }
-    dispatch(addChannel({ name: newChannel }));
     setNewChannel(``);
   };
 

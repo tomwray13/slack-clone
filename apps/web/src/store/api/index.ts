@@ -84,15 +84,6 @@ export const backendApi = createApi({
         method: `GET`,
       }),
     }),
-    getChannel: builder.query<
-      { data: { id: number; name: string; messages: Message[] } },
-      number
-    >({
-      query: (channelId: number) => ({
-        url: `/channel/${channelId}`,
-        method: `GET`,
-      }),
-    }),
     getChannels: builder.query<{ data: Channel[] }, undefined>({
       query: () => ({
         url: `/channel`,
@@ -103,8 +94,4 @@ export const backendApi = createApi({
 });
 
 export const { useGoogleAuthMutation, useLogoutMutation } = backendAuthApi;
-export const {
-  useGetCurrentUserQuery,
-  useGetChannelsQuery,
-  useGetChannelQuery,
-} = backendApi;
+export const { useGetCurrentUserQuery, useGetChannelsQuery } = backendApi;

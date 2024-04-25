@@ -11,7 +11,18 @@ export class ChannelService {
   }
 
   async findAll() {
-    return await this.databaseService.channel.findMany();
+    return await this.databaseService.channel.findMany({
+      include: {
+        messages: {
+          include: {
+            user: true,
+          },
+          orderBy: {
+            createdAt: 'desc',
+          },
+        },
+      },
+    });
   }
 
   async findOne(id: number) {
@@ -23,6 +34,9 @@ export class ChannelService {
         messages: {
           include: {
             user: true,
+          },
+          orderBy: {
+            createdAt: 'desc',
           },
         },
       },

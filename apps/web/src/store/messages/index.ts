@@ -15,20 +15,10 @@ export const messageSlice = createSlice({
   initialState,
   reducers: {
     addMessages: (state, action: PayloadAction<Message[]>) => {
-      state.data = action.payload;
+      state.data.push(...action.payload);
     },
-    addMessage: (
-      state,
-      action: PayloadAction<Pick<Message, `channelId` | `content` | `user`>>
-    ) => {
-      state.data.unshift({
-        id: state.data.length + 1,
-        channelId: action.payload.channelId,
-        content: action.payload.content,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        user: action.payload.user,
-      });
+    addMessage: (state, action: PayloadAction<Message>) => {
+      state.data.unshift(action.payload);
     },
   },
 });

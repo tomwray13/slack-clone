@@ -1,25 +1,20 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import { RootState } from "../store";
-import { addMessage, addMessages } from "../store/messages";
-import { useGetChannelQuery } from "../store/api";
+import { useSocket } from "../hooks/useSocket";
 
 export const Chat = ({ channelId }: { channelId: number }) => {
-  const dispatch = useDispatch();
+  const { socket } = useSocket();
 
+  const { data: channels } = useSelector((state: RootState) => state.channels);
+  const channel = channels.find((channel) => channel.id === channelId);
   const { user } = useSelector((state: RootState) => state.auth);
-  const { data: messages } = useSelector((state: RootState) => state.messages);
-  const {
-    data: channel,
-    isFetching,
-    isError,
-  } = useGetChannelQuery(channelId, { skip: !channelId });
-
-  useEffect(() => {
-    if (channel) {
-      dispatch(addMessages(channel.data.messages));
-    }
-  }, [channelId, channel, dispatch]);
+  const { data } = useSelector((state: RootState) => state.messages);
+  const messages = data
+    .filter((message) => message.channelId === channelId)
+    .sort((a, b) => {
+      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+    });
 
   const colors = [
     "bg-blue-50",
@@ -36,24 +31,19 @@ export const Chat = ({ channelId }: { channelId: number }) => {
     if (!newMessage || !user) {
       throw new Error(`Unable to send message`);
     }
-    console.log(`USER`, user);
-    dispatch(
-      addMessage({ content: newMessage, channelId: channelId, user: user })
-    );
+    socket?.emit(`createMessage`, {
+      content: newMessage,
+      channelId,
+      userId: user.id,
+    });
     setNewMessage(``);
   };
-  if (isFetching) {
-    return <div>Loading...</div>;
-  }
-  if (isError) {
-    return <div>Error fetching channel</div>;
-  }
   return (
     <main className="col-span-3 bg-white">
       {channel && (
         <div className="h-screen flex flex-col">
           <div className="sticky top-0 w-full p-8 border-b">
-            <h1 className="font-bold text-xl mb-2">#{channel.data.name}</h1>
+            <h1 className="font-bold text-xl mb-2">#{channel.name}</h1>
           </div>
           <div className="overflow-y-auto flex-grow p-8 flex flex-col-reverse space-y-reverse space-y-6">
             {messages.map((message) => (

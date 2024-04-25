@@ -5,12 +5,11 @@ import { RootState } from "../store";
 import { addChannels, setActiveChannel } from "../store/channels";
 import { useEffect } from "react";
 import { useGetChannelsQuery } from "../store/api";
+import { addMessages } from "../store/messages";
 
 export default function Home() {
   const dispatch = useDispatch();
-  const { activeChannelId } = useSelector(
-    (state: RootState) => state.channels
-  );
+  const { activeChannelId } = useSelector((state: RootState) => state.channels);
   const {
     data: channels,
     isFetching,
@@ -18,13 +17,16 @@ export default function Home() {
   } = useGetChannelsQuery(undefined);
 
   useEffect(() => {
-    if (channels) {
-      dispatch(addChannels(channels.data))
+    if (channels && !activeChannelId) {
+      dispatch(addChannels(channels.data));
+      channels.data.forEach((channel) => {
+        dispatch(addMessages(channel.messages));
+      });
     }
     if (channels && channels.data.length > 0 && !activeChannelId) {
       dispatch(setActiveChannel({ id: channels.data[0].id }));
     }
-  }, [dispatch, channels, activeChannelId]);
+  });
   if (isFetching) {
     return <div>Loading...</div>;
   }
@@ -37,7 +39,7 @@ export default function Home() {
   return (
     <div className="grid grid-cols-4 min-h-screen">
       <SideNav />
-      <Chat channelId={activeChannelId} />
+      {activeChannelId && <Chat channelId={activeChannelId} />}
     </div>
   );
 }
