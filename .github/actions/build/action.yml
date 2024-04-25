@@ -1,7 +1,7 @@
-name: 'Build'
-description: 'Sets up repository'
+name: "Build"
+description: "Sets up repository"
 runs:
-  using: 'composite'
+  using: "composite"
   steps:
     - name: Check out source code
       uses: actions/checkout@v3
@@ -13,4 +13,4 @@ runs:
         version: latest
     - name: Install dependencies
       shell: bash
-      run: pnpm install
+      run: pnpm install --no-frozen-lockfile
