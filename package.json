@@ -17,7 +17,7 @@
     "db:studio": "pnpm --filter backend db:studio"
   },
   "prisma": {
-    "schema": "apps/backend/database/schema.prisma"
+    "schema": "apps/backend/src/database/schema.prisma"
   },
   "keywords": [],
   "author": "",
