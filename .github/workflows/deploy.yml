@@ -17,9 +17,9 @@ jobs:
         run: pnpx prisma migrate deploy
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
-      - name: Install Railway CLI
-        run: pnpm add --global @railway/cli
-      - name: Deploy to Railway
-        run: railway up --service="nestjs-backend"
-        env:
-          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+      # - name: Install Railway CLI
+      #   run: pnpm add --global @railway/cli
+      # - name: Deploy to Railway
+      #   run: railway up --service="nestjs-backend"
+      #   env:
+      #     RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
