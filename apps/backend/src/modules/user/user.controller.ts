@@ -29,9 +29,4 @@ export class UserController {
     }
     return user;
   }
-
-  @Get(`/test`)
-  test() {
-    return true;
-  }
 }
