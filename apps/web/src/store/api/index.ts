@@ -11,10 +11,6 @@ import { Channel, User, Message } from "@backend/types";
 const baseQuery = fetchBaseQuery({
   baseUrl: process.env.NEXT_PUBLIC_BACKEND_API,
   credentials: `include`,
-  prepareHeaders: async (headers) => {
-    headers.set("Access-Control-Allow-Credentials", "true");
-    return headers;
-  },
 });
 
 const baseQueryWithReauth: BaseQueryFn<
