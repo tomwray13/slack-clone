@@ -33,9 +33,6 @@ export default function Home() {
   if (isError) {
     return <div>Error fetching channels</div>;
   }
-  if (channels) {
-    console.log(channels);
-  }
   return (
     <div className="grid grid-cols-4 min-h-screen">
       <SideNav />
