@@ -30,6 +30,7 @@ export const SideNav = () => {
   const handleLogout = async () => {
     await logoutAuth(undefined);
     dispatch(logout());
+    window.location.href = `/auth`;
   };
   return (
     <div className="h-screen flex flex-col bg-gray-100">
