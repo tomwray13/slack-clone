@@ -4,8 +4,10 @@ import { RootState } from "../store";
 import { addChannel, setActiveChannel } from "../store/channels";
 import { logout } from "../store/auth";
 import { useLogoutMutation } from "../store/api";
+import { useRouter, usePathname } from "next/navigation";
 
 export const SideNav = () => {
+  const router = useRouter();
   const [newChannel, setNewChannel] = useState(``);
   const dispatch = useDispatch();
   const [logoutAuth] = useLogoutMutation();
@@ -29,6 +31,7 @@ export const SideNav = () => {
   const handleLogout = async () => {
     await logoutAuth(undefined);
     dispatch(logout());
+    router.push(`/auth`);
   };
   return (
     <div className="h-screen flex flex-col bg-gray-100">
