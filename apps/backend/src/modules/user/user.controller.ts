@@ -5,11 +5,9 @@ import {
   NotFoundException,
   Req,
   UseGuards,
-  UseInterceptors,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { AuthGuard } from '../../core/auth/auth.guard';
-import { ParseCookieInterceptor } from './interceptors/parse-cookie.interceptor';
 import { Request } from 'express';
 
 @Controller(`user`)
@@ -18,7 +16,6 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
-  @UseInterceptors(ParseCookieInterceptor)
   getUser(@Req() req: Request & { user?: string }) {
     if (!req.user) {
       throw new BadRequestException();
